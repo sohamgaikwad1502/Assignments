@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { WITH_ALL_FILTERS } from "../utils/constants";
 
 const Launches = ({ year, launch, land }) => {
@@ -14,17 +14,14 @@ const Launches = ({ year, launch, land }) => {
     return withallfiltersData.data;
   };
 
-  console.log(year, launch, land);
   useEffect(() => {
-    if (!allLaunches) return setFilteredLaunches([]);
-    if (!launchAndLand) return setFilteredLaunches([]);
-    if (!launchSuccess) return setFilteredLaunches([]);
+    if (!allLaunches || !launchAndLand || !launchSuccess)
+      return setFilteredLaunches([]);
 
     let filtered = [...allLaunches];
     if (year && launch && land) {
       async () => {
         const allFillteredData = await fetchAll(year);
-        console.log(allFillteredData);
         filtered = [...allFillteredData];
       };
     }
@@ -67,10 +64,10 @@ const Launches = ({ year, launch, land }) => {
       {filteredLaunches.map((launchItem) => (
         <div
           key={launchItem.flight_number}
-          className="bg-white p-4 rounded-lg shadow-md justify-center items-center"
+          className="bg-white p-4 rounded-lg shadow-md flex flex-col justify-center items-center"
         >
-          <div className="flex flex-col items-center mb-6">
-            <div className="mb-6">
+          <div className="flex flex-col items-center mb-6 w-full">
+            <div className="mb-6 w-full">
               <img
                 src={
                   launchItem.links?.mission_patch_small ||
@@ -81,8 +78,8 @@ const Launches = ({ year, launch, land }) => {
               />
             </div>
 
-            <div className="flex-col justify-between items-center">
-              <h2 className="text-2xl font-bold text-blue-700 mb-4">
+            <div className="flex-col justify-between items-center w-full">
+              <h2 className="text-2xl font-bold text-blue-700 mb-4 text-center">
                 {launchItem.mission_name} #{launchItem.flight_number}
               </h2>
 
